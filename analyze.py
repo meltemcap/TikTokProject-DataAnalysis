@@ -3,6 +3,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from colorcet import palette
+from scipy import stats
 
 data = pd.read_csv("tiktok_dataset.csv")
 
@@ -169,3 +170,17 @@ opinion = data[data['claim_status']=='opinion']
 sns.scatterplot(x=opinion["video_view_count"], y=opinion["video_like_count"],
                  s=10, alpha=.3)
 plt.show()
+
+#Data exploration and hypothesis testing
+data.head()
+data.describe()
+data.isna().sum()
+data=data.dropna(axis=0)
+data.head()
+
+data.groupby("verified_status")["video_view_count"].mean()
+
+not_verified = data[data["verified_status"] == "not verified"]["video_view_count"]
+verified=data[data["verified_status"]=="verified"]["video_view_count"]
+
+stats.ttest_ind(a=not_verified, b=verified , equal_var=False)
